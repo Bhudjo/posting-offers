@@ -1,16 +1,16 @@
-package com.lightbend.akka.http.sample
+package com.buggin.postingoffers
 
-import akka.actor.{ ActorRef, ActorSystem }
+import akka.actor.{ActorRef, ActorSystem}
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.Http.ServerBinding
 import akka.http.scaladsl.server.Route
 import akka.stream.ActorMaterializer
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 import scala.io.StdIn
 
 //#main-class
-object QuickstartServer extends App with UserRoutes {
+object QuickstartServer extends App with OfferRoutes {
 
   // set up ActorSystem and other dependencies here
   //#main-class
@@ -22,11 +22,11 @@ object QuickstartServer extends App with UserRoutes {
   // Needed for the Future and its methods flatMap/onComplete in the end
   implicit val executionContext: ExecutionContext = system.dispatcher
 
-  val userRegistryActor: ActorRef = system.actorOf(UserRegistryActor.props, "userRegistryActor")
+  val offerRegistryActor: ActorRef = system.actorOf(OfferRegistryActor.props, "OfferRegistryActor")
 
   //#main-class
-  // from the UserRoutes trait
-  lazy val routes: Route = userRoutes
+  // from the OfferRoutes trait
+  lazy val routes: Route = OfferRoutes
   //#main-class
 
   //#http-server
@@ -40,7 +40,7 @@ object QuickstartServer extends App with UserRoutes {
     .flatMap(_.unbind())
     .onComplete { done =>
       done.failed.map { ex => log.error(ex, "Failed unbinding") }
-      system.terminate() 
+      system.terminate()
     }
   //#http-server
   //#main-class
