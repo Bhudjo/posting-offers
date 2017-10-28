@@ -12,7 +12,7 @@ class OfferRegistryActor extends Actor {
       sender() ! Offers(offers)
     case AddOffer(offer) => {
       //offers ++ Seq(offer)
-      sender() ! offer.id
+      sender() ! offer
     }
   }
 }

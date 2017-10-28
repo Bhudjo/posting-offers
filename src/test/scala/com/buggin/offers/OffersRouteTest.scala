@@ -1,13 +1,16 @@
 package com.buggin.offers
 
 import akka.actor.ActorRef
-import akka.http.scaladsl.model.{ContentTypes, StatusCodes}
+import akka.http.scaladsl.marshalling.Marshal
+import akka.http.scaladsl.model.{ ContentTypes, MessageEntity, StatusCodes }
 import akka.http.scaladsl.testkit.ScalatestRouteTest
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.{ Matchers, WordSpec }
 
 class OffersRouteTest
     extends WordSpec
     with Matchers
+    with ScalaFutures
     with ScalatestRouteTest
     with OffersRoutes {
 
@@ -23,8 +26,9 @@ class OffersRouteTest
         entityAs[String] should ===("""{"Offers":[]}""")
       }
     }
-    "add new offers" ignore {
-      Post("/offers") ~> routes ~> check {
+    "add new offers" in {
+      val marshalledOffer = Marshal(Offer(1)).to[MessageEntity].futureValue
+      Post("/offers").withEntity(marshalledOffer) ~> routes ~> check {
         status shouldBe StatusCodes.Created
         contentType should ===(ContentTypes.`application/json`)
         entityAs[String] should ===("""{"id":1}""")

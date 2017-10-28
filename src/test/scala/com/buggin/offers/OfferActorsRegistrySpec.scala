@@ -1,8 +1,8 @@
 package com.buggin.offers
 
-import akka.actor.{ActorRef, ActorSystem}
-import akka.testkit.{ImplicitSender, TestKit}
-import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpec, WordSpecLike}
+import akka.actor.{ ActorRef, ActorSystem }
+import akka.testkit.{ ImplicitSender, TestKit }
+import org.scalatest.{ BeforeAndAfterAll, Matchers, WordSpec, WordSpecLike }
 
 class OfferActorsRegistrySpec
     extends TestKit(ActorSystem("testSystem"))
@@ -26,6 +26,6 @@ class OfferActorsRegistrySpec
   "Adding another offer should return me its id" in {
     val requested = Offer(1)
     offerRegistryActor ! AddOffer(requested)
-    expectMsg(requested.id)
+    expectMsg(requested)
   }
 }
