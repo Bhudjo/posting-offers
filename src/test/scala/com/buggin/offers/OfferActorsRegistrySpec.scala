@@ -1,8 +1,8 @@
 package com.buggin.offers
 
-import akka.actor.{ActorRef, ActorSystem}
-import akka.testkit.{ImplicitSender, TestKit}
-import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpec, WordSpecLike}
+import akka.actor.{ ActorRef, ActorSystem }
+import akka.testkit.{ ImplicitSender, TestKit }
+import org.scalatest.{ BeforeAndAfterAll, Matchers, WordSpec, WordSpecLike }
 
 class OfferActorsRegistrySpec
     extends TestKit(ActorSystem("testSystem"))

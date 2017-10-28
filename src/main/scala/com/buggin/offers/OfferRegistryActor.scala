@@ -5,13 +5,13 @@ import akka.actor._
 class OfferRegistryActor extends Actor {
   import OfferRegistryActor._
 
-  var offers: Seq[Offer] = Seq.empty[Offer]
+  var offers = Set.empty[Offer]
 
   override def receive = {
     case GetOffers =>
-      sender() ! Offers(offers)
+      sender() ! Offers(offers.toSeq)
     case AddOffer(offer) => {
-      //offers ++ Seq(offer)
+      offers += offer
       sender() ! offer
     }
   }
