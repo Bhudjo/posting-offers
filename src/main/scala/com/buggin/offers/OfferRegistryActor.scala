@@ -5,15 +5,15 @@ import akka.actor._
 class OfferRegistryActor extends Actor {
   import OfferRegistryActor._
 
-  var offers: Seq[Nothing] = Seq.empty
+  var offers: Seq[Offer] = Seq.empty[Offer]
 
   override def receive = {
-    case GetOffers(receiver) =>
-      receiver ! offers
+    case GetOffers =>
+      sender() ! Offers(offers)
   }
 }
 case object OfferRegistryActor {
-  final case class GetOffers(receiver: ActorRef)
+  final case object GetOffers
 
   def props: Props = Props[OfferRegistryActor]
 }
