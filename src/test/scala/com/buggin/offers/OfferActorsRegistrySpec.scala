@@ -1,8 +1,8 @@
 package com.buggin.offers
 
-import akka.actor.{ ActorRef, ActorSystem }
-import akka.testkit.{ ImplicitSender, TestKit }
-import org.scalatest.{ BeforeAndAfterAll, Matchers, WordSpec, WordSpecLike }
+import akka.actor.{ActorRef, ActorSystem}
+import akka.testkit.{ImplicitSender, TestKit}
+import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpec, WordSpecLike}
 
 class OfferActorsRegistrySpec
     extends TestKit(ActorSystem("testSystem"))
@@ -27,5 +27,7 @@ class OfferActorsRegistrySpec
     val requested = Offer(1)
     offerRegistryActor ! AddOffer(requested)
     expectMsg(requested)
+    offerRegistryActor ! GetOffers
+    expectMsg(Offers(Seq(requested)))
   }
 }

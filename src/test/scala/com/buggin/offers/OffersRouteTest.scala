@@ -2,10 +2,10 @@ package com.buggin.offers
 
 import akka.actor.ActorRef
 import akka.http.scaladsl.marshalling.Marshal
-import akka.http.scaladsl.model.{ ContentTypes, MessageEntity, StatusCodes }
+import akka.http.scaladsl.model._
 import akka.http.scaladsl.testkit.ScalatestRouteTest
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.{ Matchers, WordSpec }
+import org.scalatest.{Matchers, WordSpec}
 
 class OffersRouteTest
     extends WordSpec
@@ -34,8 +34,14 @@ class OffersRouteTest
         entityAs[String] should ===("""{"id":1}""")
       }
     }
+    "be able to retrive an already present offer" in {
+      HttpRequest(uri = "/offers") ~> routes ~> check {
+        status shouldBe StatusCodes.OK
+        entityAs[String] should ===("""{"Offers":[{"id":1}]}""")
+      }
+    }
   }
 
-  override def offerRegistryActor: ActorRef =
-    system.actorOf(OfferRegistryActor.props)
+  override val offerRegistryActor: ActorRef =
+    system.actorOf(OfferRegistryActor.props, "OfferRegistry")
 }
