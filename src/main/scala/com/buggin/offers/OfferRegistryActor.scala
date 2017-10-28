@@ -9,11 +9,10 @@ class OfferRegistryActor extends Actor {
 
   override def receive = {
     case GetOffers =>
-      sender() ! Offers(offers.toSeq)
-    case AddOffer(offer) => {
+      sender() ! Offers(offers.toList)
+    case AddOffer(offer) =>
       offers += offer
       sender() ! offer
-    }
   }
 }
 case object OfferRegistryActor {

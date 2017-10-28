@@ -1,19 +1,22 @@
 package com.buggin.offers
 
-import akka.actor.ActorRef
 import akka.http.scaladsl.marshalling.Marshal
 import akka.http.scaladsl.model._
 import akka.http.scaladsl.testkit.ScalatestRouteTest
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.{ Matchers, WordSpec }
+import org.scalatest.{Matchers, WordSpec}
 
 class OffersRouteTest
     extends WordSpec
     with Matchers
     with ScalaFutures
-    with ScalatestRouteTest
-    with OffersRoutes {
+    with ScalatestRouteTest {
 
+  val api: OffersRoutes = new OffersRoutes(
+    system,
+    system.actorOf(OfferRegistryActor.props, "OfferRegistry"))
+
+  import api._
   "The offer service" should {
     "not reject requests" in {
       Get("/offers") ~> routes ~> check {
@@ -47,6 +50,4 @@ class OffersRouteTest
     }
   }
 
-  override val offerRegistryActor: ActorRef =
-    system.actorOf(OfferRegistryActor.props, "OfferRegistry")
 }
