@@ -16,5 +16,11 @@ class OffersServiceTest
         status shouldBe StatusCodes.OK
       }
     }
+    "return no offers yet" in {
+      Get("/offers") ~> routes ~> check {
+        status shouldBe StatusCodes.OK
+        entityAs[String] should ===("""{"Offers":[]}""")
+      }
+    }
   }
 }
