@@ -4,14 +4,7 @@ You are required to create a simple RESTful software service that will allow a m
 
 ##Description
 
-All my offers have shopper friendly descriptions. I price all my offers up front in a
-defined currency.
+All my offers have shopper friendly descriptions. I price all my offers up front in a defined currency.
 
 ##Todo
-
-- post order
-    - descriptions
-    - price
-        - amount 
-        - currency
 - get order x

@@ -5,7 +5,7 @@ import akka.http.scaladsl.marshalling.Marshal
 import akka.http.scaladsl.model._
 import akka.http.scaladsl.testkit.ScalatestRouteTest
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.{ Matchers, WordSpec }
+import org.scalatest.{Matchers, WordSpec}
 
 class OffersRouteTest
     extends WordSpec
@@ -26,18 +26,23 @@ class OffersRouteTest
         entityAs[String] should ===("""{"Offers":[]}""")
       }
     }
+    val testDescription = "a shopper friendly description"
+    val jsonTestOffer =
+      s"""{"id":1,"price":{"amount":42,"currency":"EUR"},"description":"$testDescription"}"""
+
     "add new offers" in {
-      val marshalledOffer = Marshal(Offer(1)).to[MessageEntity].futureValue
+      val offer = Offer(1, Price(42, "EUR"), testDescription)
+      val marshalledOffer = Marshal(offer).to[MessageEntity].futureValue
       Post("/offers").withEntity(marshalledOffer) ~> routes ~> check {
         status shouldBe StatusCodes.Created
         contentType should ===(ContentTypes.`application/json`)
-        entityAs[String] should ===("""{"id":1}""")
+        entityAs[String] should ===(jsonTestOffer)
       }
     }
     "be able to retrive an already present offer" in {
       HttpRequest(uri = "/offers") ~> routes ~> check {
         status shouldBe StatusCodes.OK
-        entityAs[String] should ===("""{"Offers":[{"id":1}]}""")
+        entityAs[String] should ===(s"""{"Offers":[$jsonTestOffer]}""")
       }
     }
   }
