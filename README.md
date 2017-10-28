@@ -7,4 +7,12 @@ You are required to create a simple RESTful software service that will allow a m
 All my offers have shopper friendly descriptions. I price all my offers up front in a defined currency.
 
 ##Todo
+
+- server
 - get order x
+
+
+##Assumptions
+
+- json: the assignment isn't explicit about it
+- backend-only
