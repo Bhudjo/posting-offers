@@ -14,6 +14,7 @@ class OfferRegistryActor extends Actor {
 }
 case object OfferRegistryActor {
   final case object GetOffers
+  final case class AddOffer(offer: Offer)
 
   def props: Props = Props[OfferRegistryActor]
 }

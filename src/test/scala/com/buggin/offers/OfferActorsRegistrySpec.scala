@@ -4,7 +4,7 @@ import akka.actor.{ActorRef, ActorSystem}
 import akka.testkit.{ImplicitSender, TestKit}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpec, WordSpecLike}
 
-class OfferRegistrySpec
+class OfferActorsRegistrySpec
     extends TestKit(ActorSystem("testSystem"))
     with WordSpecLike
     with Matchers
@@ -15,11 +15,17 @@ class OfferRegistrySpec
     shutdown()
   }
 
+  import OfferRegistryActor._
+  val offerRegistryActor: ActorRef =
+    system.actorOf(props, "offerRegister")
+
   "Asking offers should return still an empty List" in {
-    import OfferRegistryActor._
-    val offerRegistryActor: ActorRef =
-      system.actorOf(props, "offerRegister")
     offerRegistryActor ! GetOffers
     expectMsg(Offers(Seq.empty))
+  }
+  "Adding another offer should return me its id" in {
+    val requested = Offer(1)
+    offerRegistryActor ! AddOffer(requested)
+    expectMsg(requested.id)
   }
 }
