@@ -24,10 +24,14 @@ class OfferActorsRegistrySpec
     expectMsg(Offers(Seq.empty))
   }
   "Adding another offer should return me its id" in {
-    val requested = Offer(1, Price(42, "EUR"), "a shopper friendly description")
+    val requested = OfferRequest(Price(42, "EUR"),
+                                 "a shopper friendly description",
+                                 MerchantID("mysticMerchant381"))
     offerRegistryActor ! AddOffer(requested)
-    expectMsg(requested)
+    expectMsg(OfferResponse(1))
     offerRegistryActor ! GetOffers
-    expectMsg(Offers(Seq(requested)))
+    expectMsg(
+      Offers(Seq(
+        Offer(1, requested.price, requested.description, requested.merchant))))
   }
 }

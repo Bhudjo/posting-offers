@@ -19,11 +19,12 @@ class OffersRoutes(system: ActorSystem, offerRegistryActor: ActorRef)
     extends JsonSupport
     with RouteConcatenation {
 
-  val t = system.settings.config.getLong("api.request-timeout")
   implicit lazy val timeout: Timeout = Timeout(t, TimeUnit.SECONDS)
-
   val log: LoggingAdapter = system.log
 
+  lazy val routes: Route = getRoute ~ postRoute
+
+  private val t = system.settings.config.getLong("api.request-timeout")
   private val getRoute: Route =
     pathPrefix("offers") {
       get {
@@ -35,8 +36,9 @@ class OffersRoutes(system: ActorSystem, offerRegistryActor: ActorRef)
   private val postRoute: Route =
     pathPrefix("offers") {
       post {
-        entity(as[Offer]) { offer =>
-          val future = (offerRegistryActor ? AddOffer(offer)).mapTo[Offer]
+        entity(as[OfferRequest]) { offer =>
+          val future =
+            (offerRegistryActor ? AddOffer(offer)).mapTo[OfferResponse]
           onSuccess(future) { f =>
             log.info("POST successful. Created resource with id #{}", f.id)
             complete((StatusCodes.Created, f))
@@ -44,6 +46,4 @@ class OffersRoutes(system: ActorSystem, offerRegistryActor: ActorRef)
         }
       }
     }
-
-  lazy val routes: Route = getRoute ~ postRoute
 }

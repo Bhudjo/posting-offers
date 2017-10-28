@@ -29,25 +29,23 @@ class OffersRouteTest
         entityAs[String] should ===("""{"Offers":[]}""")
       }
     }
-    val testDescription = "a shopper friendly description"
-    val jsonTestOffer =
-      s"""{"id":1,"price":{"amount":42,"currency":"EUR"},"description":"$testDescription"}"""
-
     "add new offers" in {
-      val offer = Offer(1, Price(42, "EUR"), testDescription)
+      val offer =
+        OfferRequest(Price(42, "EUR"), "", MerchantID("mysticalMerchant234"))
       val marshalledOffer = Marshal(offer).to[MessageEntity].futureValue
       Post("/offers").withEntity(marshalledOffer) ~> routes ~> check {
         status shouldBe StatusCodes.Created
         contentType should ===(ContentTypes.`application/json`)
-        entityAs[String] should ===(jsonTestOffer)
+        entityAs[String] should ===(s"""{"id":1}""")
       }
     }
-    "be able to retrive an already present offer" in {
+    "be able to retrive all present offers" in {
       HttpRequest(uri = "/offers") ~> routes ~> check {
         status shouldBe StatusCodes.OK
-        entityAs[String] should ===(s"""{"Offers":[$jsonTestOffer]}""")
+        entityAs[String] should ===(
+          s"""{"Offers":[{"id":1,"price":{"amount":42,"currency":"EUR"},"description":"","merchant":{"id":"mysticalMerchant234"}}]}""")
       }
     }
+//    "being able to retrieve a specific offer"
   }
-
 }

@@ -8,11 +8,10 @@ All my offers have shopper friendly descriptions. I price all my offers up front
 
 ##Todo
 
-- server
 - get order x
-
 
 ##Assumptions
 
 - json: the assignment isn't explicit about it
+- merchant id to store to whom the offer belongs
 - backend-only
