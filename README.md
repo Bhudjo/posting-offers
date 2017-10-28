@@ -10,6 +10,8 @@ defined currency.
 ##Todo
 
 - get orders
+    - call offer registry actor
+- json
 - post order
     - descriptions
     - price
